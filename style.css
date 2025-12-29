@@ -69,7 +69,8 @@ body {
     filter: brightness(1.1);
 }
 
-.buttons > button:active {
+.buttons > button:active,
+.buttons > .active {
     transform: translateY(8px);
     box-shadow: none;
 }

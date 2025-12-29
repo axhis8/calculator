@@ -11,7 +11,7 @@ const multiply = function(a, b) {
 }
 
 const divide = function(a, b) {
-   return a == 0 || b == 0 ? "ERROR" : a / b; 
+   return a == 0 ? "ERROR" : a / b; 
 }
 
 let firstNum;
@@ -62,6 +62,7 @@ operatorBtns.forEach((btn) => btn.addEventListener('click', () => {
         firstNum = display.textContent;
         display.textContent = "";
         operator = btn.textContent;
+        btn.classList.add("active");
     }));
 // Adds Event Listener for every Operator (+, -, *, /)
 
@@ -69,5 +70,6 @@ operatorBtns.forEach((btn) => btn.addEventListener('click', () => {
 operationBtn.addEventListener('click', () => {
     secondNum = display.textContent;
     display.textContent = operate(operator, Number(firstNum), Number(secondNum));
+    operatorBtns.forEach(btn => btn.classList.remove("active"));
 })
 
