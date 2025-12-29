@@ -5,7 +5,6 @@
     box-sizing: border-box;
     font-family: "Orbitron", Arial, Helvetica, sans-serif;
     margin: 0;
-    padding: 0;
 }
 
 body {
@@ -32,6 +31,11 @@ body {
     border: 5px solid rgb(75, 75, 75);
     background-color: rgb(210, 230, 220);
     border-radius: 30px;
+
+    font-weight: 500;
+    text-align: end;
+    padding: 25px 10px;
+    font-size: 3em;
 }
 
 .buttons {
@@ -79,7 +83,7 @@ body {
 }
 
 .buttons > :is(.divide, .multiply, .add, .subtract, .operate):hover {
-    filter: brightness(2);
+    filter: brightness(1.5);
 }
 
 .buttons > :is(.divide, .multiply, .add, .subtract, .operate):active {
