@@ -146,10 +146,19 @@ operationBtn.addEventListener('click', () => {
 
 
 const decimalBtn = document.querySelector(".dot");
-const checkDecimal = () => display.textContent.includes(".") ? "" : ".";
+const checkDecimal = () => {
+    if (display.textContent.includes(".")) return "";
+    else if (display.textContent === "") return "0.";
+    else return ".";
+} ;
 // Checks if the Display already contains a decimal, if so don't return one
 
 decimalBtn.addEventListener('click', () => display.textContent += checkDecimal());
+document.addEventListener('keydown', (e) => {
+    if (e.key === ".") {
+        display.textContent += checkDecimal()
+    }
+});
 
 
 const toggleSignBtn = document.querySelector(".plus-minus");
