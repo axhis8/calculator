@@ -123,12 +123,13 @@ operationBtn.addEventListener('click', () => {
 });
 
 
-const toggleSign = document.querySelector(".plus-minus");
+const toggleSignBtn = document.querySelector(".plus-minus");
+const percentBtn = document.querySelector(".percent");
 
-toggleSign.addEventListener('click', () => {
-    let num;
-    num = Number(display.textContent) * -1;
+const getCurrentNum = () => Number(display.textContent);
 
-    display.textContent = num;
-})
+toggleSignBtn.addEventListener('click', () => display.textContent = getCurrentNum() * -1);
 // Toggles sign of the displayed Number
+
+percentBtn.addEventListener('click', () => display.textContent = getCurrentNum() / 100);
+// Toggles the Number to percent
