@@ -39,7 +39,6 @@ function reset() {
     operator = "";
     firstNum = 0;
     secondNum = 0;
-    result = 0;
     resultOnDisplay = false;
     operatorBtnPressed = false;
     
@@ -68,7 +67,7 @@ const clearBtn = document.querySelector(".clear");
 
 delBtn.addEventListener('click', () => display.textContent = display.textContent.slice(0, -1));
 
-clearBtn.addEventListener('click', () => reset());
+clearBtn.addEventListener('click', reset);
 
 
 const operatorBtns = document.querySelectorAll(".operator");
@@ -121,6 +120,13 @@ operationBtn.addEventListener('click', () => {
 });
 
 
+const decimalBtn = document.querySelector(".dot");
+const checkDecimal = () => display.textContent.includes(".") ? "" : ".";
+// Checks if the Display already contains a decimal, if so don't return one
+
+decimalBtn.addEventListener('click', () => display.textContent += checkDecimal());
+
+
 const toggleSignBtn = document.querySelector(".plus-minus");
 const percentBtn = document.querySelector(".percent");
 
@@ -131,3 +137,7 @@ toggleSignBtn.addEventListener('click', () => display.textContent = getCurrentNu
 
 percentBtn.addEventListener('click', () => display.textContent = getCurrentNum() / 100);
 // Toggles the Number to percent
+
+// To-Do
+// - Be able to toggle Operator
+// - Add Keyboard Support
