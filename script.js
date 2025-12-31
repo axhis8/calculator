@@ -154,7 +154,7 @@ operatorBtns.forEach(btn => btn.addEventListener('click', (e) => {
     if (toggleOperators) {
         operatorBtns.forEach(btn => btn.classList.remove("active"));
     }
-// Toggles Operator (Line 165), without changing results
+// Toggles Operator, without changing results
 
     else if (operatorBtnPressed) {
         calculateResult();
