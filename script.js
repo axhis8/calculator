@@ -75,12 +75,28 @@ let secondNum = 0;
 let operator = "";
 let result = 0;
 let resultOnDisplay = false;
+let operatorBtnPressed = false;
 
 operatorBtns.forEach((btn) => btn.addEventListener('click', () => {
 
+    if (operatorBtnPressed) {
+        secondNum = display.textContent;
+
+        result = String(operate(operator, Number(firstNum), Number(secondNum))).substring(0, 12);
+
+        display.textContent = result;
+        firstNum = result;
+                
+        resultOnDisplay = true;
+    }
+
+    else {
+        firstNum = display.textContent;
+        display.textContent = "";
+        operatorBtnPressed = true;
+    }
+
     operator = btn.textContent;
-    firstNum = display.textContent;
-    display.textContent = "";
     btn.classList.add("active");
 
     }));
@@ -91,6 +107,7 @@ operationBtn.addEventListener('click', () => {
         return;
     }
 
+    operatorBtnPressed = false;
     secondNum = display.textContent
     result = String(operate(operator, Number(firstNum), Number(secondNum))).substring(0, 12); 
     // Sets the result to max 12 Characters to not overpopulate the Display
