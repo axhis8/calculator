@@ -87,6 +87,9 @@ operatorBtns.forEach((btn) => btn.addEventListener('click', () => {
 // Adds Event Listener for every Operator (+, -, *, /)
 
 operationBtn.addEventListener('click', () => {
+    if (!firstNum) {
+        return;
+    }
 
     secondNum = display.textContent
     result = String(operate(operator, Number(firstNum), Number(secondNum))).substring(0, 12); 
