@@ -34,7 +34,19 @@ function operate(operator, a, b) {
     }
 }
 
+function typeDigit(num) {
+
+    if (resultOnDisplay) {
+        resultOnDisplay = false;
+        display.textContent = "";
+    }
+
+    display.textContent += num;
+    operatorBtns.forEach(btn => btn.classList.remove("active"));
+}
+
 function roundDecimal(num) {
+
     num = String(num);
     if (num.includes(".")) {
         let numArray = num.split(".");
@@ -66,16 +78,14 @@ function reset() {
 const display = document.querySelector(".display");
 const digits = document.querySelectorAll(".digit");
 
-digits.forEach(digit => digit.addEventListener('click', () => {
+digits.forEach(digit => {
+    digit.addEventListener('click', () => typeDigit(digit.textContent));
 
-    if (resultOnDisplay) {
-        resultOnDisplay = false;
-        display.textContent = "";
-    }
+    document.addEventListener('keydown', (e) => {
+        if (e.key === digit.textContent) typeDigit(digit.textContent);
+    });
 
-    display.textContent += digit.textContent;
-    operatorBtns.forEach(btn => btn.classList.remove("active"));
-})); 
+});
 // Adds Event Listener for every Digit (0-9)
 
 
