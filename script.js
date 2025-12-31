@@ -171,7 +171,6 @@ operatorBtns.forEach(btn => btn.addEventListener('click', (e) => {
 
 
 document.addEventListener('keydown', (e) => {
-    e.preventDefault();    
 
     // Digits
     digits.forEach(digit => {
@@ -194,7 +193,9 @@ document.addEventListener('keydown', (e) => {
             break;
 
         case "Enter":
+            e.preventDefault();   
             if (!firstNum) return;
+
             calculateResult();
             operatorBtnPressed = false;            
             break;
