@@ -77,19 +77,19 @@ const operationBtn = document.querySelector(".operation");
 let firstNum = 0;
 let secondNum = 0;
 let operator = "";
-let result = 0;
 let resultOnDisplay = false;
 let operatorBtnPressed = false;
+
+const result = () => String(operate(operator, Number(firstNum), Number(secondNum))).substring(0, 12);
+// Equates the given digits, then sets the result to max 12 Characters, so it doesn't overpopulate the Display
 
 operatorBtns.forEach((btn) => btn.addEventListener('click', () => {
 
     if (operatorBtnPressed) {
         secondNum = display.textContent;
 
-        result = String(operate(operator, Number(firstNum), Number(secondNum))).substring(0, 12);
-
-        display.textContent = result;
-        firstNum = result;
+        display.textContent = result();
+        firstNum = display.textContent;
                 
         resultOnDisplay = true;
     } 
@@ -112,12 +112,10 @@ operationBtn.addEventListener('click', () => {
         return;
     }
 
-    operatorBtnPressed = false;
     secondNum = display.textContent
-    result = String(operate(operator, Number(firstNum), Number(secondNum))).substring(0, 12); 
-// Sets the result to max 12 Characters, so it doesn't overpopulate the Display
+    display.textContent = result(); 
 
-    display.textContent = result; 
+    operatorBtnPressed = false;
     resultOnDisplay = true;
 
 });
