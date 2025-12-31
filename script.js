@@ -94,7 +94,10 @@ const clearBtn = document.querySelector(".clear");
 
 delBtn.addEventListener('click', () => display.textContent = display.textContent.slice(0, -1));
 document.addEventListener('keydown', (e) => {
-    if (e.key === "Backspace") display.textContent = display.textContent.slice(0, -1)
+    if (e.key === "Backspace") {
+        e.preventDefault();    
+        display.textContent = display.textContent.slice(0, -1)
+    }
 });
 
 clearBtn.addEventListener('click', reset);
@@ -109,18 +112,20 @@ let operator = "";
 let resultOnDisplay = false;
 let operatorBtnPressed = false;
 
-const result = () => roundDecimal(operate(operator, Number(firstNum), Number(secondNum)));
-// Equates the given digits & rounds the Decimals so it doesn't overpopulate the Display
+const calculateResult = () => {
+    resultOnDisplay = true;
+    secondNum = display.textContent;
+
+    display.textContent = roundDecimal(operate(operator, Number(firstNum), Number(secondNum)));
+    // Equates the given digits & rounds the Decimals so it doesn't overpopulate the Display
+
+}
 
 operatorBtns.forEach((btn) => btn.addEventListener('click', () => {
 
     if (operatorBtnPressed) {
-        secondNum = display.textContent;
-
-        display.textContent = result();
+        calculateResult();
         firstNum = display.textContent;
-                
-        resultOnDisplay = true;
     } 
 // Checks if a Operator is already pressed, so that it equates the numbers & shows it on the Display
 
@@ -139,12 +144,17 @@ operatorBtns.forEach((btn) => btn.addEventListener('click', () => {
 operationBtn.addEventListener('click', () => {
     if (!firstNum) return;
 
-    secondNum = display.textContent;
-    display.textContent = result();
-
+    calculateResult();
     operatorBtnPressed = false;
-    resultOnDisplay = true;
-
+});
+document.addEventListener('keydown', (e) => {
+    if (e.key === "Enter") {
+        e.preventDefault(); 
+        if (!firstNum) return;
+    
+        calculateResult();
+        operatorBtnPressed = false;
+    }
 });
 
 
