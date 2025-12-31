@@ -39,6 +39,9 @@ function reset() {
     operator = "";
     firstNum = 0;
     secondNum = 0;
+    result = 0;
+    resultOnDisplay = false;
+    operatorBtnPressed = false;
     
     operatorBtns.forEach(btn => btn.classList.remove("active"));
 }
