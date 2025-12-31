@@ -11,7 +11,7 @@ const multiply = function(a, b) {
 }
 
 const divide = function(a, b) {
-   return b == 0 ? "ERROR" : a / b;
+   return b === 0 ? "ERROR" : a / b;
 }
 // Checks if a number is divided by 0, if so return "ERROR"
 
@@ -33,6 +33,20 @@ function operate(operator, a, b) {
 
     }
 }
+
+function roundDecimal(num) {
+    num = String(num);
+    if (num.includes(".")) {
+        let numArray = num.split(".");
+
+        if (numArray[1].length > 12) return Number(num).toFixed(2);
+    }
+    
+    return num;
+}
+// Checks if the Result has Decimals, splits it into an Array and checks if the Length is above the Display Limit. 
+// If so, set the decimals only to two. 
+// This also handles the problem with JavaScripts Rounding on decimal numbers.
 
 function reset() {
     display.textContent = "";
@@ -79,8 +93,8 @@ let operator = "";
 let resultOnDisplay = false;
 let operatorBtnPressed = false;
 
-const result = () => String(operate(operator, Number(firstNum), Number(secondNum))).substring(0, 12);
-// Equates the given digits, then sets the result to max 12 Characters, so it doesn't overpopulate the Display
+const result = () => roundDecimal(operate(operator, Number(firstNum), Number(secondNum)));
+// Equates the given digits & rounds the Decimals so it doesn't overpopulate the Display
 
 operatorBtns.forEach((btn) => btn.addEventListener('click', () => {
 
@@ -107,12 +121,10 @@ operatorBtns.forEach((btn) => btn.addEventListener('click', () => {
 // Adds Event Listener for every Operator (+, -, *, /)
 
 operationBtn.addEventListener('click', () => {
-    if (!firstNum) {
-        return;
-    }
+    if (!firstNum) return;
 
     secondNum = display.textContent
-    display.textContent = result(); 
+    display.textContent = result();
 
     operatorBtnPressed = false;
     resultOnDisplay = true;
@@ -137,7 +149,3 @@ toggleSignBtn.addEventListener('click', () => display.textContent = getCurrentNu
 
 percentBtn.addEventListener('click', () => display.textContent = getCurrentNum() / 100);
 // Toggles the Number to percent
-
-// To-Do
-// - Be able to toggle Operator
-// - Add Keyboard Support
