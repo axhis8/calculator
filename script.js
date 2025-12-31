@@ -17,6 +17,7 @@ let secondNum = 0;
 let operator = "";
 
 let resultOnDisplay = false;
+let toggleOperators = false;
 let operatorBtnPressed = false;
 
 
@@ -90,6 +91,10 @@ function typeDigit(num) {
         display.textContent = "";
     }
 
+    if (toggleOperators) {
+        toggleOperators = false;
+    }
+
     display.textContent += num;
     operatorBtns.forEach(btn => btn.classList.remove("active"));
 }
@@ -115,17 +120,21 @@ function reset() {
 const getCurrentNum = () => Number(display.textContent);
 
 
-delBtn.addEventListener('click', () => display.textContent = display.textContent.slice(0, -1));
-
 clearBtn.addEventListener('click', reset);
 
 decimalBtn.addEventListener('click', () => display.textContent += checkDecimal());
 
+percentBtn.addEventListener('click', () => display.textContent = getCurrentNum() / 100);
+// Toggles the Number to percent
+
 toggleSignBtn.addEventListener('click', () => display.textContent = getCurrentNum() * -1);
 // Toggles sign of the displayed Number
 
-percentBtn.addEventListener('click', () => display.textContent = getCurrentNum() / 100);
-// Toggles the Number to percent
+digits.forEach(digit => digit.addEventListener('click', () => typeDigit(digit.textContent)));
+// Adds Event Listener for every Digit (0-9)
+
+delBtn.addEventListener('click', () => display.textContent = display.textContent.slice(0, -1));
+
 
 operationBtn.addEventListener('click', () => {
     if (!firstNum) return;
@@ -134,12 +143,14 @@ operationBtn.addEventListener('click', () => {
     operatorBtnPressed = false;
 });
 
-digits.forEach(digit => digit.addEventListener('click', () => typeDigit(digit.textContent)));
-// Adds Event Listener for every Digit (0-9)
+operatorBtns.forEach(btn => btn.addEventListener('click', (e) => {
 
-operatorBtns.forEach((btn) => btn.addEventListener('click', (e) => {
+    if (toggleOperators) {
+        operatorBtns.forEach(btn => btn.classList.remove("active"));
+    }
+// Toggles Operator (Line 165), without changing results
 
-    if (operatorBtnPressed) {
+    else if (operatorBtnPressed) {
         calculateResult();
         firstNum = display.textContent;
     } 
@@ -153,6 +164,7 @@ operatorBtns.forEach((btn) => btn.addEventListener('click', (e) => {
 
     operator = btn.textContent;
     btn.classList.add("active");
+    toggleOperators = true;
 
     }));
 // Adds Event Listener for every Operator (+, -, *, /)
