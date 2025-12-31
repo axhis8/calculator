@@ -106,6 +106,12 @@ function checkDecimal() {
 } 
 // Checks if the Display already contains a decimal, if so don't return one
 
+function toggleClassActive(btn) {
+    btn.classList.add("active");
+    setTimeout(() => btn.classList.remove("active"), 100);
+}
+// Adds Animation for Buttons when clicked with a keyboard key
+
 function reset() {
     display.textContent = "";
     operator = "";
@@ -174,7 +180,10 @@ document.addEventListener('keydown', (e) => {
 
     // Digits
     digits.forEach(digit => {
-        if (e.key === digit.textContent) typeDigit(digit.textContent);
+        if (e.key === digit.textContent) {
+        typeDigit(digit.textContent);
+        toggleClassActive(digit);
+        }
     });
 
     // Operators / Specials
@@ -182,20 +191,24 @@ document.addEventListener('keydown', (e) => {
 
         case "Backspace":
             display.textContent = display.textContent.slice(0, -1);
+            toggleClassActive(delBtn);
             break;
 
         case "%":
             display.textContent = getCurrentNum() / 100;
+            toggleClassActive(percentBtn);
             break;
 
         case ".":
             display.textContent += checkDecimal();
+            toggleClassActive(decimalBtn);
             break;
 
         case "Enter":
             e.preventDefault();   
             if (!firstNum) return;
 
+            toggleClassActive(operationBtn);
             calculateResult();
             operatorBtnPressed = false;            
             break;
