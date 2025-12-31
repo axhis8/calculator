@@ -29,6 +29,7 @@ body {
 
 .display {
     width: 450px;
+    overflow: scroll;
     height: 120px;
     margin: 40px auto 0px;
     padding: 25px 12px;
