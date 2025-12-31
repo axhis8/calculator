@@ -121,3 +121,14 @@ operationBtn.addEventListener('click', () => {
     resultOnDisplay = true;
 
 });
+
+
+const toggleSign = document.querySelector(".plus-minus");
+
+toggleSign.addEventListener('click', () => {
+    let num;
+    num = Number(display.textContent) * -1;
+
+    display.textContent = num;
+})
+// Toggles sign of the displayed Number
