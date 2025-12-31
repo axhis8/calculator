@@ -12,7 +12,8 @@ const multiply = function(a, b) {
 
 const divide = function(a, b) {
    return b == 0 ? "ERROR" : a / b;
-}   
+}
+// Checks if a number is divided by 0, if so return "ERROR"
 
 function operate(operator, a, b) {
 
@@ -88,7 +89,8 @@ operatorBtns.forEach((btn) => btn.addEventListener('click', () => {
         firstNum = result;
                 
         resultOnDisplay = true;
-    }
+    } 
+// Checks if a Operator is already pressed, so that it equates the numbers & shows it on the Display
 
     else {
         firstNum = display.textContent;
@@ -110,7 +112,7 @@ operationBtn.addEventListener('click', () => {
     operatorBtnPressed = false;
     secondNum = display.textContent
     result = String(operate(operator, Number(firstNum), Number(secondNum))).substring(0, 12); 
-    // Sets the result to max 12 Characters to not overpopulate the Display
+// Sets the result to max 12 Characters, so it doesn't overpopulate the Display
 
     display.textContent = result; 
     resultOnDisplay = true;
