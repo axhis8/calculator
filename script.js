@@ -93,6 +93,9 @@ const delBtn = document.querySelector(".delete");
 const clearBtn = document.querySelector(".clear");
 
 delBtn.addEventListener('click', () => display.textContent = display.textContent.slice(0, -1));
+document.addEventListener('keydown', (e) => {
+    if (e.key === "Backspace") display.textContent = display.textContent.slice(0, -1)
+});
 
 clearBtn.addEventListener('click', reset);
 
@@ -136,7 +139,7 @@ operatorBtns.forEach((btn) => btn.addEventListener('click', () => {
 operationBtn.addEventListener('click', () => {
     if (!firstNum) return;
 
-    secondNum = display.textContent
+    secondNum = display.textContent;
     display.textContent = result();
 
     operatorBtnPressed = false;
@@ -170,4 +173,7 @@ toggleSignBtn.addEventListener('click', () => display.textContent = getCurrentNu
 // Toggles sign of the displayed Number
 
 percentBtn.addEventListener('click', () => display.textContent = getCurrentNum() / 100);
+document.addEventListener('keydown', (e) => {
+    if (e.key === "%") display.textContent = getCurrentNum() / 100
+});
 // Toggles the Number to percent
