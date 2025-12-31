@@ -35,9 +35,10 @@ function operate(operator, a, b) {
 
 function reset() {
     display.textContent = "";
+    operator = "";
     firstNum = 0;
     secondNum = 0;
-    operator = "";
+    
     operatorBtns.forEach(btn => btn.classList.remove("active"));
 }
 
@@ -46,10 +47,12 @@ const display = document.querySelector(".display");
 const digits = document.querySelectorAll(".digit");
 
 digits.forEach(digit => digit.addEventListener('click', () => {
+
     if (resultOnDisplay) {
         resultOnDisplay = false;
         display.textContent = "";
     }
+
     display.textContent += digit.textContent;
     operatorBtns.forEach(btn => btn.classList.remove("active"));
 })); 
@@ -70,6 +73,7 @@ const operationBtn = document.querySelector(".operation");
 let firstNum = 0;
 let secondNum = 0;
 let operator = "";
+let result = 0;
 let resultOnDisplay = false;
 
 operatorBtns.forEach((btn) => btn.addEventListener('click', () => {
@@ -83,7 +87,12 @@ operatorBtns.forEach((btn) => btn.addEventListener('click', () => {
 // Adds Event Listener for every Operator (+, -, *, /)
 
 operationBtn.addEventListener('click', () => {
-    secondNum = display.textContent;
-    display.textContent = operate(operator, Number(firstNum), Number(secondNum));
+
+    secondNum = display.textContent
+    result = String(operate(operator, Number(firstNum), Number(secondNum))).substring(0, 12); 
+    // Sets the result to max 12 Characters to not overpopulate the Display
+
+    display.textContent = result; 
     resultOnDisplay = true;
+
 });
