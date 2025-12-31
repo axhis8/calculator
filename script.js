@@ -1,16 +1,38 @@
-const add = function(a, b) {
+const display = document.querySelector(".display");
+const digits = document.querySelectorAll(".digit");
+
+const delBtn = document.querySelector(".delete");
+const clearBtn = document.querySelector(".clear");
+
+const operatorBtns = document.querySelectorAll(".operator");
+const operationBtn = document.querySelector(".operation");
+
+const decimalBtn = document.querySelector(".dot");
+
+const toggleSignBtn = document.querySelector(".plus-minus");
+const percentBtn = document.querySelector(".percent");
+
+let firstNum = 0;
+let secondNum = 0;
+let operator = "";
+
+let resultOnDisplay = false;
+let operatorBtnPressed = false;
+
+
+function add(a, b) {
     return a + b;
 }
 
-const subtract = function(a, b) {
+function subtract(a, b) {
     return a - b;
 }
 
-const multiply = function(a, b) {
+function multiply(a, b) {
     return a * b;   
 }
 
-const divide = function(a, b) {
+function divide(a, b) {
    return b === 0 ? "ERROR" : a / b;
 }
 // Checks if a number is divided by 0, if so return "ERROR"
@@ -34,15 +56,13 @@ function operate(operator, a, b) {
     }
 }
 
-function typeDigit(num) {
+function calculateResult() {
+    resultOnDisplay = true;
+    secondNum = display.textContent;
 
-    if (resultOnDisplay) {
-        resultOnDisplay = false;
-        display.textContent = "";
-    }
+    display.textContent = roundDecimal(operate(operator, Number(firstNum), Number(secondNum)));
+    // Equates the given digits & rounds the Decimals so it doesn't overpopulate the Display
 
-    display.textContent += num;
-    operatorBtns.forEach(btn => btn.classList.remove("active"));
 }
 
 function roundDecimal(num) {
@@ -63,6 +83,24 @@ function roundDecimal(num) {
 // If so, set the decimals only to two & if 0 is the last digit, remove it.
 // This also handles the problem with JavaScripts Rounding on decimal numbers.
 
+function typeDigit(num) {
+
+    if (resultOnDisplay) {
+        resultOnDisplay = false;
+        display.textContent = "";
+    }
+
+    display.textContent += num;
+    operatorBtns.forEach(btn => btn.classList.remove("active"));
+}
+
+function checkDecimal() {
+    if (display.textContent.includes(".")) return "";
+    else if (display.textContent === "") return "0.";
+    else return ".";
+} 
+// Checks if the Display already contains a decimal, if so don't return one
+
 function reset() {
     display.textContent = "";
     operator = "";
@@ -74,54 +112,32 @@ function reset() {
     operatorBtns.forEach(btn => btn.classList.remove("active"));
 }
 
+const getCurrentNum = () => Number(display.textContent);
 
-const display = document.querySelector(".display");
-const digits = document.querySelectorAll(".digit");
-
-digits.forEach(digit => {
-    digit.addEventListener('click', () => typeDigit(digit.textContent));
-
-    document.addEventListener('keydown', (e) => {
-        if (e.key === digit.textContent) typeDigit(digit.textContent);
-    });
-
-});
-// Adds Event Listener for every Digit (0-9)
-
-
-const delBtn = document.querySelector(".delete");
-const clearBtn = document.querySelector(".clear");
 
 delBtn.addEventListener('click', () => display.textContent = display.textContent.slice(0, -1));
-document.addEventListener('keydown', (e) => {
-    if (e.key === "Backspace") {
-        e.preventDefault();    
-        display.textContent = display.textContent.slice(0, -1)
-    }
-});
 
 clearBtn.addEventListener('click', reset);
 
+decimalBtn.addEventListener('click', () => display.textContent += checkDecimal());
 
-const operatorBtns = document.querySelectorAll(".operator");
-const operationBtn = document.querySelector(".operation");
+toggleSignBtn.addEventListener('click', () => display.textContent = getCurrentNum() * -1);
+// Toggles sign of the displayed Number
 
-let firstNum = 0;
-let secondNum = 0;
-let operator = "";
-let resultOnDisplay = false;
-let operatorBtnPressed = false;
+percentBtn.addEventListener('click', () => display.textContent = getCurrentNum() / 100);
+// Toggles the Number to percent
 
-const calculateResult = () => {
-    resultOnDisplay = true;
-    secondNum = display.textContent;
+operationBtn.addEventListener('click', () => {
+    if (!firstNum) return;
 
-    display.textContent = roundDecimal(operate(operator, Number(firstNum), Number(secondNum)));
-    // Equates the given digits & rounds the Decimals so it doesn't overpopulate the Display
+    calculateResult();
+    operatorBtnPressed = false;
+});
 
-}
+digits.forEach(digit => digit.addEventListener('click', () => typeDigit(digit.textContent)));
+// Adds Event Listener for every Digit (0-9)
 
-operatorBtns.forEach((btn) => btn.addEventListener('click', () => {
+operatorBtns.forEach((btn) => btn.addEventListener('click', (e) => {
 
     if (operatorBtnPressed) {
         calculateResult();
@@ -141,49 +157,34 @@ operatorBtns.forEach((btn) => btn.addEventListener('click', () => {
     }));
 // Adds Event Listener for every Operator (+, -, *, /)
 
-operationBtn.addEventListener('click', () => {
-    if (!firstNum) return;
 
-    calculateResult();
-    operatorBtnPressed = false;
-});
 document.addEventListener('keydown', (e) => {
-    if (e.key === "Enter") {
-        e.preventDefault(); 
-        if (!firstNum) return;
-    
-        calculateResult();
-        operatorBtnPressed = false;
+    e.preventDefault();    
+
+    // Digits
+    digits.forEach(digit => {
+        if (e.key === digit.textContent) typeDigit(digit.textContent);
+    });
+
+    // Operators / Specials
+    switch (e.key) {
+
+        case "Backspace":
+            display.textContent = display.textContent.slice(0, -1);
+            break;
+
+        case "%":
+            display.textContent = getCurrentNum() / 100;
+            break;
+
+        case ".":
+            display.textContent += checkDecimal();
+            break;
+
+        case "Enter":
+            if (!firstNum) return;
+            calculateResult();
+            operatorBtnPressed = false;            
+            break;
     }
 });
-
-
-const decimalBtn = document.querySelector(".dot");
-const checkDecimal = () => {
-    if (display.textContent.includes(".")) return "";
-    else if (display.textContent === "") return "0.";
-    else return ".";
-} ;
-// Checks if the Display already contains a decimal, if so don't return one
-
-decimalBtn.addEventListener('click', () => display.textContent += checkDecimal());
-document.addEventListener('keydown', (e) => {
-    if (e.key === ".") {
-        display.textContent += checkDecimal()
-    }
-});
-
-
-const toggleSignBtn = document.querySelector(".plus-minus");
-const percentBtn = document.querySelector(".percent");
-
-const getCurrentNum = () => Number(display.textContent);
-
-toggleSignBtn.addEventListener('click', () => display.textContent = getCurrentNum() * -1);
-// Toggles sign of the displayed Number
-
-percentBtn.addEventListener('click', () => display.textContent = getCurrentNum() / 100);
-document.addEventListener('keydown', (e) => {
-    if (e.key === "%") display.textContent = getCurrentNum() / 100
-});
-// Toggles the Number to percent
