@@ -19,6 +19,7 @@ Visit the page online: [Calculator](https://axhis8.github.io/calculator/)
 - Change the sign of the number
 - Keyboard support
 - 3D Button pressing effect
+- Object Style based Syntax
 
 ## How to Use
 
@@ -38,6 +39,7 @@ Visit the page online: [Calculator](https://axhis8.github.io/calculator/)
 
 ## What I Learned
 
+- Handling Objects with JavaScript
 - Working with CSS shadow boxes and borders
 - JavaScript event handling and DOM manipulation
 - Keyboard event handling
