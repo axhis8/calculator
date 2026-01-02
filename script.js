@@ -82,7 +82,7 @@ const input = {
         if (num.includes(".")) {
             let numArray = num.split(".");
 
-            if (numArray[1].length > 12) {
+            if (numArray[1].length > MAX_DISPLAY_DIGITS) {
                 num = Number(num).toFixed(2);
                 return num.endsWith("0") ? num.slice(0, -1) : num;
             }
@@ -91,7 +91,6 @@ const input = {
     }, 
 // Checks if the Result has Decimals, splits it into an Array and checks if the Length is above the Display Limit. 
 // If so, set the decimals only to two & if 0 is the last digit, remove it.
-// This also handles the problem with JavaScripts Rounding on decimal numbers.
     
     typeDigit(num) {
 
