@@ -16,6 +16,7 @@ Visit the page online: [Calculator](https://axhis8.github.io/calculator/)
 - Add decimals
 - Percentage
 - Clear & Delete digits
+- Input History shown at the top of the Display
 - Change the sign of the number
 - Keyboard support
 - 3D Button pressing effect

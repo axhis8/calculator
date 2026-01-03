@@ -3,10 +3,13 @@
 ========================= */
 
 const display = {
-    div: document.querySelector(".display"),
-    getText() { return this.div.textContent; },
-    setText(text) { this.div.textContent = text; },
-    MAX_DISPLAY_DIGITS: 12
+    display: document.querySelector(".input"),
+    displayGetText() { return this.display.textContent; },
+    displaySetText(text) { this.display.textContent = text; },
+    MAX_DISPLAY_DIGITS: 12,
+
+    history: document.querySelector(".history"),
+    historySetText(firstNum, operator, secondNum) { this.history.textContent = `${firstNum} ${operator} ${secondNum}`; },
 }
 
 const button = {
@@ -65,15 +68,16 @@ const math = {
 }
 
 /* =========================
-    4. ACTIONS / INPUT
+    4. ACTIONS
 ========================= */
 
-const input = {
+const action = {
     calculate() {
         state.operatorBtnPressed = false;
         state.resultOnDisplay = true;
-        state.secondNum = display.getText();
-        display.setText(this.roundDecimal(math.operate(state.operator, Number(state.firstNum), Number(state.secondNum))));
+        state.secondNum = display.displayGetText();
+        display.historySetText(state.firstNum, state.operator, state.secondNum);
+        display.displaySetText(this.roundDecimal(math.operate(state.operator, Number(state.firstNum), Number(state.secondNum))));
         // Equates the given digits & rounds the Decimals so it doesn't overpopulate the Display
     },
 
@@ -82,7 +86,7 @@ const input = {
         if (num.includes(".")) {
             let numArray = num.split(".");
 
-            if (numArray[1].length > MAX_DISPLAY_DIGITS) {
+            if (numArray[1].length > display.MAX_DISPLAY_DIGITS) {
                 num = Number(num).toFixed(2);
                 return num.endsWith("0") ? num.slice(0, -1) : num;
             }
@@ -96,13 +100,13 @@ const input = {
 
         if (state.resultOnDisplay) {
             state.resultOnDisplay = false;
-            display.setText("");
+            display.displaySetText("");
         }
         if (state.toggleOperators) {
             state.toggleOperators = false;
         }
 
-        display.setText(display.getText() + num);
+        display.displaySetText(display.displayGetText() + num);
         button.operators.forEach(btn => btn.classList.remove("active"));
     },
 
@@ -113,14 +117,15 @@ const input = {
         } // Toggles Operator, without changing results
 
         else if (state.operatorBtnPressed) {
-            input.calculate();
-            state.firstNum = display.getText();
+            action.calculate();
+            state.firstNum = display.displayGetText();
         } // Checks if a Operator is already pressed, so that it equates the numbers & shows it on the Display
 
         else {
-            state.firstNum = display.getText();
+            state.firstNum = display.displayGetText();
             state.operatorBtnPressed = true;
-            display.setText("");
+            display.historySetText(state.firstNum, btn.textContent, "");
+            display.displaySetText("");
         }
 
         state.operator = btn.textContent;
@@ -129,8 +134,8 @@ const input = {
     },
 
     checkDecimal() {
-        if (display.getText().includes(".")) return "";
-        else if (display.getText() === "") return "0.";
+        if (display.displayGetText().includes(".")) return "";
+        else if (display.displayGetText() === "") return "0.";
         else return ".";
     },
     // Checks if the Display already contains a decimal, if so don't return one
@@ -141,16 +146,17 @@ const input = {
     },
     // Adds Animation for Buttons when clicked with a keyboard key
 
-    deleteLastDigit() { display.setText(display.getText().slice(0, -1)); },
+    deleteLastDigit() { display.displaySetText(display.displayGetText().slice(0, -1)); },
 
-    addDecimal() { display.setText(display.getText() + input.checkDecimal()); },
+    addDecimal() { display.displaySetText(display.displayGetText() + action.checkDecimal()); },
 
-    toPercent() { display.setText(display.getText() / 100); },
+    toPercent() { display.displaySetText(display.displayGetText() / 100); },
 
-    toggleSign() { display.setText(display.getText() * -1) },
+    toggleSign() { display.displaySetText(display.displayGetText() * -1) },
  
     reset() {
-        display.setText("");
+        display.historySetText("", "", "");
+        display.displaySetText("");
         state.operator = "";
         state.firstNum = null;
         state.secondNum = null;
@@ -165,20 +171,20 @@ const input = {
 ========================= */
 
 function init() {
-    button.clear.addEventListener('click', input.reset);
-    button.percent.addEventListener('click', input.toPercent);
-    button.decimal.addEventListener('click', input.addDecimal);
-    button.toggleSign.addEventListener('click', input.toggleSign);
-    button.deleteDigit.addEventListener('click', input.deleteLastDigit);
+    button.clear.addEventListener('click', action.reset);
+    button.percent.addEventListener('click', action.toPercent);
+    button.decimal.addEventListener('click', action.addDecimal);
+    button.toggleSign.addEventListener('click', action.toggleSign);
+    button.deleteDigit.addEventListener('click', action.deleteLastDigit);
 
-    button.digits.forEach(digit => digit.addEventListener('click', () => input.typeDigit(digit.textContent)));
+    button.digits.forEach(digit => digit.addEventListener('click', () => action.typeDigit(digit.textContent)));
 
-    button.operators.forEach(btn => btn.addEventListener('click', () => input.typeOperator(btn))); 
+    button.operators.forEach(btn => btn.addEventListener('click', () => action.typeOperator(btn))); 
     // Adds Event Listener for every Operator (+, -, *, /)
 
     button.operate.addEventListener('click', () => {
         if (state.firstNum === null) return;
-        input.calculate();
+        action.calculate();
     });
 
     document.addEventListener('keydown', (e) => {
@@ -186,8 +192,8 @@ function init() {
         // Digits
         button.digits.forEach(digit => {
             if (e.key === digit.textContent) {
-                input.typeDigit(digit.textContent);
-                input.toggleClassActive(digit);
+                action.typeDigit(digit.textContent);
+                action.toggleClassActive(digit);
             }
         });
 
@@ -195,26 +201,26 @@ function init() {
         switch (e.key) {
 
             case "Backspace":
-                input.deleteLastDigit();
-                input.toggleClassActive(button.deleteDigit);
+                action.deleteLastDigit();
+                action.toggleClassActive(button.deleteDigit);
                 break;
 
             case "%":
-                input.toPercent();
-                input.toggleClassActive(button.percent);
+                action.toPercent();
+                action.toggleClassActive(button.percent);
                 break;
 
             case ".":
-                input.addDecimal();
-                input.toggleClassActive(button.decimal);
+                action.addDecimal();
+                action.toggleClassActive(button.decimal);
                 break;
 
             case "Enter":
                 e.preventDefault();   
                 if (!state.firstNum) return;
 
-                input.toggleClassActive(button.operate);
-                input.calculate();
+                action.toggleClassActive(button.operate);
+                action.calculate();
                 break;
         }
     });
